@@ -1,1 +1,3 @@
 # Visually-impaired-assistance
+ASSISTIVE WEARABLE FOR THE VISUALLY
+IMPAIRED
