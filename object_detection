@@ -1,8 +1,10 @@
 import cv2
 import tensorflow as tf
 import numpy as np
+import pyttsx3  # Import the text-to-speech library
 
-# Preprocess and load your Kaggle dataset accordingly
+# Initialize the text-to-speech engine
+engine = pyttsx3.init()
 
 # Define your model architecture
 model = tf.keras.Sequential([
@@ -15,7 +17,7 @@ model = tf.keras.Sequential([
     tf.keras.layers.Dense(5, activation='softmax')  # 5 classes for 10, 20, 50, 100, 500 Rs notes
 ])
 
-# Assuming model weights are already trained with Kaggle dataset and saved in 'currency_model.h5'
+# Load the pre-trained model weights
 model.load_weights('currency_model.h5')
 
 def preprocess_image(image_path):
@@ -40,7 +42,12 @@ def detect_currency(image_path):
     currency_labels = ["10 Rs", "20 Rs", "50 Rs", "100 Rs", "500 Rs"]
     
     # Display result
-    print(f"Detected currency: {currency_labels[class_id]} with confidence {confidence:.2f}")
+    detected_currency = f"Detected currency: {currency_labels[class_id]} with confidence {confidence:.2f}"
+    print(detected_currency)
+    
+    # Convert the result to speech
+    engine.say(detected_currency)
+    engine.runAndWait()
 
 if __name__ == "__main__":
     # Example image path, replace with your image path
