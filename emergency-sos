@@ -14,7 +14,6 @@ sid = 'xxxxxx50xxxxxxxxxxxxxxxxxxxxxc81555'
 authToken = '382fbbd3f9xxxxxxxxxxxxxx5'
 twilio_number = '+130000000'
 emergency_contact = '+917000000000'
-
 client = Client(sid, authToken)
 
 # Signal handler for graceful exit
@@ -26,29 +25,20 @@ def signal_handler(sig, frame):
 signal.signal(signal.SIGINT, signal_handler)
 signal.signal(signal.SIGTERM, signal_handler)
 
-print("Press the button...")
+def send_sos():
+    print("Sending emergency SOS message...")
+    try:
+        message = client.messages.create(
+            to=emergency_contact,
+            from_=twilio_number,
+            body="SOS worked!!"
+        )
+        print("Message sent")
+    except Exception as e:
+        print(f"Failed to send message: {e}")
 
-try:
-    while True:
-        if GPIO.input(button_pin) == GPIO.LOW:
-            print("Button pressed")
-            try:
-                message = client.messages.create(
-                    to=emergency_contact,
-                    from_=twilio_number,
-                    body="SOS worked!!"
-                )
-                print("Message sent")
-            except Exception as e:
-                print(f"Failed to send message: {e}")
-            
-            # Debounce
-            time.sleep(0.5)
-        else:
-            print("Button not pressed")
-        
-        time.sleep(0.1)
-except KeyboardInterrupt:
-    pass
-finally:
-    GPIO.cleanup()
+# Send the SOS message immediately
+send_sos()
+
+# Cleanup GPIO
+GPIO.cleanup()
